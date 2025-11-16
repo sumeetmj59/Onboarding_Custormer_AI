@@ -1,0 +1,41 @@
+[
+  {
+    "id": "2d1cd681-b48d-4f13-80ae-f4096f066658",
+    "submitted_at": "2025-11-16T14:48:50.194561Z",
+    "data": {
+      "company_name": "Demo Bank Ltd",
+      "industry": "Banking",
+      "contact_email": "security@demobank.com",
+      "regions": [
+        "APAC",
+        "EMEA"
+      ],
+      "traffic_level": "high",
+      "cloud_providers": [
+        "AWS",
+        "Azure"
+      ],
+      "critical_apps": [
+        "online banking portal",
+        "payments gateway"
+      ],
+      "has_waf": false,
+      "has_mfa_for_admins": false,
+      "logging_strategy": "basic access logs only",
+      "compliance": [
+        "PCI-DSS"
+      ]
+    },
+    "evaluation": {
+      "decision": "reject",
+      "risk_score": 100,
+      "issues": [
+        "Using cloud providers but no WAF is configured.",
+        "Admin accounts do not have MFA enabled.",
+        "Only basic logging is enabled; consider more detailed logs."
+      ],
+      "summary": "Risk evaluated at 100/100 with 3 key issue(s). These should be reviewed before final approval."
+    },
+    "final_decision": null
+  }
+]
