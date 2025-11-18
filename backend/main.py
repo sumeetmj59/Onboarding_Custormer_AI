@@ -188,22 +188,14 @@ def evaluate_with_gpt(req: NetworkRequest) -> EvaluationResult:
         )
 
     except Exception as e:
-        # Log actual error internally for debugging (not shown to users)
-        print("LLM evaluation issue:", repr(e))
-
-        # ✅ Clean, safe fallback: use rule-based engine + nice explanation
-        result = evaluate_with_rules(req)
-        result.summary = (
-            "AI scoring is currently running in limited demo mode. "
-            "This shared prototype does not have paid token credits attached "
-            "to the OpenAI API key, so the system is using the rule-based "
-            "engine to generate the risk score and key issues shown above. "
-            "In a real customer deployment, Imperva would connect this "
-            "workflow to the customer's own paid LLM account (OpenAI, Gemini, "
-            "etc.) to provide full AI-powered evaluation and deeper insights."
+        # Log and fall back so the API still returns something
+        print(f"[WARN] GPT evaluation failed: {e}")
+        fallback = evaluate_with_rules(req)
+        fallback.summary = (
+            f"GPT evaluation failed, fallback to rule-based scoring. "
+            f"Original error: {e}"
         )
-
-        return result
+        return fallback
 
 
 # -----------------------------
