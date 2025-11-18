@@ -9,7 +9,7 @@ const API_BASE =
   DEFAULT_API_BASE;
 
 export async function evaluateNetwork(payload) {
-  const url = `${API_BASE}/evaluate`;
+  const url = `${API_BASE}/evaluate/ai`;
 
   const res = await fetch(url, {
     method: "POST",
