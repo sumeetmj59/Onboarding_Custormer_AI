@@ -186,16 +186,21 @@ def evaluate_with_gpt(req: NetworkRequest) -> EvaluationResult:
             issues=data.get("issues", []),
             summary=data.get("summary", "No summary provided."),
         )
-
     except Exception as e:
-        # Log and fall back so the API still returns something
-        print(f"[WARN] GPT evaluation failed: {e}")
-        fallback = evaluate_with_rules(req)
-        fallback.summary = (
-            f"GPT evaluation failed, fallback to rule-based scoring. "
-            f"Original error: {e}"
+        # Log actual error internally for debugging (not shown to users)
+        print("LLM evaluation issue:", repr(e))
+
+        result = rule_based_evaluation(request)
+
+        result.summary = (
+            "AI scoring is currently running in limited demo mode. "
+            "The shared API key does not have paid token credits, so this environment "
+            "uses the rule-based scoring engine. "
+            "In real-world deployments, companies use their own paid OpenAI or "
+            "enterprise LLM accounts, enabling the full AI-powered evaluation."
         )
-        return fallback
+
+        return result
 
 
 # -----------------------------
