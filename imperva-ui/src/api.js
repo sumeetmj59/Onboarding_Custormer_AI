@@ -1,17 +1,25 @@
-// src/api.js
+// src/lib/api.js
 
-const API_BASE = 'http://127.0.0.1:8000';
+const DEFAULT_API_BASE = "https://onboarding-custormer-ai.onrender.com";
+
+const API_BASE =
+  (typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env.VITE_API_BASE) ||
+  DEFAULT_API_BASE;
 
 export async function evaluateNetwork(payload) {
-  const res = await fetch(`${API_BASE}/evaluate/ai`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const url = `${API_BASE}/evaluate`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Backend error ${res.status}: ${text}`);
+    throw new Error(`Backend error: ${res.status} (${res.statusText})`);
   }
-  return res.json();
+
+  return await res.json();
 }
