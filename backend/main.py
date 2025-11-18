@@ -186,21 +186,18 @@ def evaluate_with_gpt(req: NetworkRequest) -> EvaluationResult:
             issues=data.get("issues", []),
             summary=data.get("summary", "No summary provided."),
         )
-
     except Exception as e:
         # Log actual error internally for debugging (not shown to users)
         print("LLM evaluation issue:", repr(e))
 
-        # ✅ Clean, safe fallback: use rule-based engine + nice explanation
-        result = evaluate_with_rules(req)
+        result = rule_based_evaluation(request)
+
         result.summary = (
             "AI scoring is currently running in limited demo mode. "
-            "This shared prototype does not have paid token credits attached "
-            "to the OpenAI API key, so the system is using the rule-based "
-            "engine to generate the risk score and key issues shown above. "
-            "In a real customer deployment, Imperva would connect this "
-            "workflow to the customer's own paid LLM account (OpenAI, Gemini, "
-            "etc.) to provide full AI-powered evaluation and deeper insights."
+            "The shared API key does not have paid token credits, so this environment "
+            "uses the rule-based scoring engine. "
+            "In real-world deployments, companies use their own paid OpenAI or "
+            "enterprise LLM accounts, enabling the full AI-powered evaluation."
         )
 
         return result
